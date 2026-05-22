@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatClient 开发进度</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f7fa; color: #333; line-height: 1.6; }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 48px 0;
+      text-align: center;
+    }
+    .header h1 { font-size: 32px; margin-bottom: 8px; }
+    .header p { opacity: 0.9; font-size: 15px; }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 32px 20px; }
+
+    .timeline { position: relative; padding-left: 32px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 11px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #e0e0e0;
+    }
+
+    .entry {
+      position: relative;
+      margin-bottom: 32px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .entry::before {
+      content: '';
+      position: absolute;
+      left: -27px;
+      top: 24px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #667eea;
+      border: 2px solid #fff;
+      box-shadow: 0 0 0 2px #667eea;
+    }
+
+    .entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .entry-date {
+      font-size: 13px;
+      color: #999;
+    }
+    .entry-hash {
+      font-size: 12px;
+      color: #667eea;
+      font-family: monospace;
+      background: #f0f2ff;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .entry h3 {
+      font-size: 16px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    .tag-feat { background: #e6f7ff; color: #1890ff; }
+    .tag-fix { background: #f6ffed; color: #52c41a; }
+    .tag-refactor { background: #fff7e6; color: #fa8c16; }
+    .tag-docs { background: #f9f0ff; color: #722ed1; }
+
+    .features {
+      list-style: none;
+      padding: 0;
+    }
+    .features li {
+      padding: 6px 0;
+      font-size: 14px;
+      color: #555;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .features li::before {
+      content: '✓';
+      color: #52c41a;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>ChatClient 开发进度</h1>
+  <p>仿微信即时通讯客户端 - 功能更新记录</p>
+</div>
+
+<div class="container">
+  <div class="timeline">
+
+    <!-- 2026-05-23 新功能批次 -->
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-23</span>
+        <span class="entry-hash">d923076</span>
+      </div>
+      <h3>拖拽发送文件和剪贴板粘贴发送图片</h3>
+      <span class="tag tag-feat">新功能</span>
+      <ul class="features">
+        <li>拖拽文件到消息区域显示蓝色虚线提示</li>
+        <li>松开鼠标自动上传并发送</li>
+        <li>在输入框粘贴图片自动上传并发送</li>
+        <li>支持截图、复制的图片等</li>
+        <li>文件大小限制 10MB</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-23</span>
+        <span class="entry-hash">a35820c</span>
+      </div>
+      <h3>群聊 @提及功能</h3>
+      <span class="tag tag-feat">新功能</span>
+      <ul class="features">
+        <li>输入 @ 弹出成员列表</li>
+        <li>支持按昵称/用户名搜索过滤</li>
+        <li>键盘上下箭头选择，Enter/Tab 确认</li>
+        <li>群聊消息中 @提及高亮显示（蓝色可点击）</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-23</span>
+        <span class="entry-hash">83601f5</span>
+      </div>
+      <h3>扩展表情选择器</h3>
+      <span class="tag tag-feat">新功能</span>
+      <ul class="features">
+        <li>表情分类标签页（表情、手势、符号）</li>
+        <li>200+ 表情符号</li>
+        <li>网格布局，最大高度 240px 可滚动</li>
+        <li>hover 放大效果</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-23</span>
+        <span class="entry-hash">78b89e3</span>
+      </div>
+      <h3>消息搜索功能</h3>
+      <span class="tag tag-feat">新功能</span>
+      <ul class="features">
+        <li>头部添加搜索按钮</li>
+        <li>搜索栏支持输入关键词实时过滤</li>
+        <li>显示搜索结果数量（x / y）</li>
+        <li>上下箭头切换搜索结果</li>
+        <li>当前高亮消息自动滚动到可见区域</li>
+        <li>搜索关键词在消息中高亮显示</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-23</span>
+        <span class="entry-hash">9c59246</span>
+      </div>
+      <h3>右键菜单 + 边界检测</h3>
+      <span class="tag tag-feat">新功能</span>
+      <span class="tag tag-fix">修复</span>
+      <ul class="features">
+        <li>右击消息气泡弹出上下文菜单（复制、撤回）</li>
+        <li>复制消息内容到剪贴板</li>
+        <li>撤回选项仅自己发送且 2 分钟内显示</li>
+        <li>菜单使用 Teleport 挂载到 body 避免溢出裁剪</li>
+        <li>菜单添加边界检测，防止超出视口</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-23</span>
+        <span class="entry-hash">74811eb</span>
+      </div>
+      <h3>设置弹窗改为左右布局</h3>
+      <span class="tag tag-refactor">优化</span>
+      <ul class="features">
+        <li>左侧导航栏（账号资料、账号安全）</li>
+        <li>右侧内容区域</li>
+        <li>弹窗使用固定比例大小（50vw x 60vh）</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-23</span>
+        <span class="entry-hash">e74af3d</span>
+      </div>
+      <h3>设置页面</h3>
+      <span class="tag tag-feat">新功能</span>
+      <ul class="features">
+        <li>左下角退出按钮改为设置按钮</li>
+        <li>点击头像也可打开设置</li>
+        <li>账号资料：更换头像、修改昵称</li>
+        <li>账号安全：退出登录</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-23</span>
+        <span class="entry-hash">f8230e5</span>
+      </div>
+      <h3>修复头像显示问题</h3>
+      <span class="tag tag-fix">修复</span>
+      <ul class="features">
+        <li>新增 utils/avatar.ts 统一处理头像 URL</li>
+        <li>服务器返回相对路径时自动拼接 API 基础地址</li>
+        <li>修复会话列表、聊天区域、通讯录的头像显示</li>
+        <li>修复 WebSocket 消息字段 camelCase → snake_case 转换</li>
+        <li>乐观更新：发送消息立即显示</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-22</span>
+        <span class="entry-hash">c52a0ae</span>
+      </div>
+      <h3>Electron 迁移注释</h3>
+      <span class="tag tag-docs">文档</span>
+      <ul class="features">
+        <li>stores/chat.ts - localStorage → electron-store/SQLite</li>
+        <li>stores/auth.ts - Token 安全存储方案（keytar）</li>
+        <li>services/api.ts - 离线请求队列</li>
+        <li>services/socket.ts - 系统通知集成</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-22</span>
+        <span class="entry-hash">a36607f</span>
+      </div>
+      <h3>刷新页面保留会话列表</h3>
+      <span class="tag tag-feat">新功能</span>
+      <ul class="features">
+        <li>会话列表持久化到 localStorage</li>
+        <li>页面加载时自动恢复保存的会话</li>
+        <li>恢复活跃会话并加载历史消息</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-header">
+        <span class="entry-date">2026-05-22</span>
+        <span class="entry-hash">99478b7</span>
+      </div>
+      <h3>初始化项目</h3>
+      <span class="tag tag-feat">新功能</span>
+      <ul class="features">
+        <li>Vue 3 + TypeScript + Vite + Pinia + Vue Router</li>
+        <li>用户认证（登录/注册、RSA加密、验证码）</li>
+        <li>好友系统（搜索、申请、接受/拒绝、删除）</li>
+        <li>私聊（文字、图片、文件、撤回、已读状态）</li>
+        <li>群聊（创建、管理、消息）</li>
+        <li>实时通讯（WebSocket、在线状态、离线消息）</li>
+        <li>仿微信 UI（三栏布局、会话列表、消息气泡）</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">
+  ChatClient - 仿微信即时通讯客户端
+</div>
+
+</body>
+</html>

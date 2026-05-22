@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatClient 项目说明</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      line-height: 1.8;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      padding: 60px 0;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .header p {
+      opacity: 0.9;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .card h2 {
+      font-size: 22px;
+      color: #667eea;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #f0f0f0;
+    }
+
+    .card h3 {
+      font-size: 17px;
+      color: #333;
+      margin: 20px 0 12px;
+    }
+
+    .card p {
+      color: #555;
+      margin-bottom: 12px;
+    }
+
+    .file-tree {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px 24px;
+      border-radius: 8px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+      margin: 16px 0;
+      white-space: pre;
+    }
+
+    .file-tree .folder { color: #dcdcaa; }
+    .file-tree .file { color: #9cdcfe; }
+    .file-tree .desc { color: #6a9955; }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .feature-item {
+      background: #f8f9ff;
+      border: 1px solid #e8ecff;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .feature-item .icon {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .feature-item h4 {
+      font-size: 15px;
+      color: #333;
+      margin-bottom: 6px;
+    }
+
+    .feature-item p {
+      font-size: 13px;
+      color: #666;
+      margin: 0;
+    }
+
+    .code-block {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 16px 20px;
+      border-radius: 8px;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+      margin: 12px 0;
+      white-space: pre;
+    }
+
+    .code-block .comment { color: #6a9955; }
+    .code-block .keyword { color: #569cd6; }
+    .code-block .string { color: #ce9178; }
+
+    .tip {
+      background: #e6f7ff;
+      border-left: 4px solid #1890ff;
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+    }
+
+    .tip-title {
+      font-weight: 600;
+      color: #1890ff;
+      margin-bottom: 4px;
+    }
+
+    .warning {
+      background: #fff7e6;
+      border-left: 4px solid #fa8c16;
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin: 16px 0;
+    }
+
+    .warning-title {
+      font-weight: 600;
+      color: #fa8c16;
+      margin-bottom: 4px;
+    }
+
+    .step-list {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+    }
+
+    .step-list li {
+      counter-increment: step;
+      padding: 12px 0 12px 48px;
+      position: relative;
+      border-left: 2px solid #e8e8e8;
+      margin-left: 16px;
+    }
+
+    .step-list li:last-child {
+      border-left-color: transparent;
+    }
+
+    .step-list li::before {
+      content: counter(step);
+      position: absolute;
+      left: -15px;
+      top: 12px;
+      width: 28px;
+      height: 28px;
+      background: #667eea;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .step-list li h4 {
+      font-size: 15px;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .step-list li p {
+      font-size: 14px;
+      color: #666;
+      margin: 0;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-right: 6px;
+    }
+
+    .tag-vue { background: #e8f5e9; color: #2e7d32; }
+    .tag-ts { background: #e3f2fd; color: #1565c0; }
+    .tag-pinia { background: #fce4ec; color: #c62828; }
+    .tag-socket { background: #fff3e0; color: #e65100; }
+
+    .footer {
+      text-align: center;
+      padding: 40px;
+      color: #999;
+      font-size: 14px;
+    }
+
+    .footer a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+    }
+
+    th, td {
+      padding: 10px 14px;
+      text-align: left;
+      border: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    th {
+      background: #fafafa;
+      font-weight: 600;
+      color: #555;
+    }
+
+    td code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: #d4380d;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>ChatClient 项目说明</h1>
+  <p>基于 Vue 3 + TypeScript 的仿微信即时通讯客户端</p>
+  <div style="margin-top: 16px;">
+    <span class="tag tag-vue">Vue 3</span>
+    <span class="tag tag-ts">TypeScript</span>
+    <span class="tag tag-pinia">Pinia</span>
+    <span class="tag tag-socket">Socket.io</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- 工作内容 -->
+  <div class="card">
+    <h2>做了什么</h2>
+    <p>根据 <code>chatServer</code> 后端的 API 文档和测试页面，创建了完整的前端聊天客户端。</p>
+
+    <h3>项目结构</h3>
+    <div class="file-tree">
+<span class="folder">src/</span>
+├── <span class="folder">types/</span>
+│   └── <span class="file">index.ts</span>            <span class="desc">// TypeScript 类型定义（User, Message, Group 等）</span>
+├── <span class="folder">services/</span>
+│   ├── <span class="file">api.ts</span>              <span class="desc">// HTTP API 封装（30+ 接口）</span>
+│   ├── <span class="file">rsa.ts</span>              <span class="desc">// RSA 加密工具</span>
+│   └── <span class="file">socket.ts</span>           <span class="desc">// WebSocket 服务封装</span>
+├── <span class="folder">stores/</span>
+│   ├── <span class="file">auth.ts</span>             <span class="desc">// 认证状态（登录/登出/Token管理）</span>
+│   ├── <span class="file">contact.ts</span>          <span class="desc">// 联系人状态（好友/群/在线状态）</span>
+│   └── <span class="file">chat.ts</span>             <span class="desc">// 聊天状态（消息/会话/撤回）</span>
+├── <span class="folder">views/</span>
+│   ├── <span class="file">Login.vue</span>           <span class="desc">// 登录页（验证码 + RSA加密）</span>
+│   ├── <span class="file">Register.vue</span>        <span class="desc">// 注册页（头像上传）</span>
+│   └── <span class="file">Chat.vue</span>            <span class="desc">// 主聊天页（三栏布局）</span>
+├── <span class="folder">components/</span>
+│   ├── <span class="file">Sidebar.vue</span>         <span class="desc">// 左侧导航栏</span>
+│   ├── <span class="file">SessionList.vue</span>     <span class="desc">// 会话列表</span>
+│   ├── <span class="file">ContactPanel.vue</span>    <span class="desc">// 通讯录（好友/群/申请）</span>
+│   └── <span class="file">ChatWindow.vue</span>      <span class="desc">// 聊天窗口（消息展示+输入）</span>
+├── <span class="file">App.vue</span>               <span class="desc">// 根组件</span>
+└── <span class="file">main.ts</span>               <span class="desc">// 入口文件</span>
+    </div>
+
+    <h3>功能清单</h3>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <div class="icon">🔐</div>
+        <h4>用户认证</h4>
+        <p>登录/注册、RSA 密码加密、验证码、JWT Token 管理</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">👥</div>
+        <h4>好友系统</h4>
+        <p>搜索用户、发送/接受/拒绝好友申请、删除好友</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">💬</div>
+        <h4>私聊</h4>
+        <p>文字、图片、文件发送，消息撤回，已读状态</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">👨‍👩‍👧‍👦</div>
+        <h4>群聊</h4>
+        <p>创建群、加入/退出、踢人、转让群主、解散</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">📡</div>
+        <h4>实时通讯</h4>
+        <p>基于 Socket.io 的 WebSocket 连接，离线消息推送</p>
+      </div>
+      <div class="feature-item">
+        <div class="icon">🎨</div>
+        <h4>仿微信 UI</h4>
+        <p>三栏布局、会话列表、消息气泡、在线状态</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 启动方式 -->
+  <div class="card">
+    <h2>如何启动</h2>
+    <ol class="step-list">
+      <li>
+        <h4>确保后端已启动</h4>
+        <p>先在 <code>chatServer</code> 目录运行 <code>npm start</code>，确保服务在 <code>localhost:3000</code> 运行</p>
+      </li>
+      <li>
+        <h4>安装依赖</h4>
+        <p>在 <code>chatClient</code> 目录运行 <code>npm install</code></p>
+      </li>
+      <li>
+        <h4>启动开发服务器</h4>
+        <p>运行 <code>npm run dev</code>，访问 <code>http://localhost:5173</code></p>
+      </li>
+      <li>
+        <h4>测试功能</h4>
+        <p>注册两个账号，在不同浏览器窗口登录，测试聊天功能</p>
+      </li>
+    </ol>
+
+    <div class="code-block">
+<span class="comment"># 终端 1：启动后端</span>
+<span class="keyword">cd</span> chatServer
+<span class="keyword">npm</span> start
+
+<span class="comment"># 终端 2：启动前端</span>
+<span class="keyword">cd</span> chatClient
+<span class="keyword">npm</span> install
+<span class="keyword">npm</span> run dev
+    </div>
+  </div>
+
+  <!-- 注意事项 -->
+  <div class="card">
+    <h2>注意事项</h2>
+
+    <div class="warning">
+      <div class="warning-title">CORS 跨域</div>
+      <p>开发时前端在 5173 端口，后端在 3000 端口，存在跨域。确保后端已配置 CORS 允许跨域请求，否则 API 调用会失败。</p>
+    </div>
+
+    <div class="warning">
+      <div class="warning-title">RSA 公钥缓存</div>
+      <p>RSA 公钥在首次使用时获取并缓存。如果后端重启生成了新密钥对，需要刷新前端页面清除缓存，否则加密会失败。</p>
+    </div>
+
+    <div class="warning">
+      <div class="warning-title">文件上传大小</div>
+      <p>后端限制文件上传最大 10MB，前端也做了相同限制。如需修改，需同时调整前后端配置。</p>
+    </div>
+
+    <div class="tip">
+      <div class="tip-title">多窗口测试</div>
+      <p>测试聊天功能时，可以用 Chrome 的无痕模式或不同浏览器打开两个窗口，分别登录不同账号。</p>
+    </div>
+
+    <div class="tip">
+      <div class="tip-title">环境变量</div>
+      <p>API 地址通过 <code>.env.development</code> 配置，默认指向 <code>http://localhost:3000</code>。如需修改后端地址，创建 <code>.env.local</code> 文件覆盖即可。</p>
+    </div>
+
+    <div class="tip">
+      <div class="tip-title">消息撤回限制</div>
+      <p>消息撤回功能限制在发送后 2 分钟内，这是后端逻辑控制的。超过 2 分钟的撤回请求会被拒绝。</p>
+    </div>
+  </div>
+
+  <!-- 架构说明 -->
+  <div class="card">
+    <h2>架构说明</h2>
+
+    <h3>数据流</h3>
+    <div class="table-wrapper">
+      <table>
+        <tr>
+          <th>层级</th>
+          <th>职责</th>
+          <th>文件</th>
+        </tr>
+        <tr>
+          <td><strong>Views</strong></td>
+          <td>页面级组件，组合 Components 和 Stores</td>
+          <td><code>Login.vue</code>, <code>Chat.vue</code></td>
+        </tr>
+        <tr>
+          <td><strong>Components</strong></td>
+          <td>UI 组件，接收 Props，触发 Events</td>
+          <td><code>ChatWindow.vue</code>, <code>Sidebar.vue</code></td>
+        </tr>
+        <tr>
+          <td><strong>Stores</strong></td>
+          <td>状态管理，处理业务逻辑</td>
+          <td><code>auth.ts</code>, <code>chat.ts</code></td>
+        </tr>
+        <tr>
+          <td><strong>Services</strong></td>
+          <td>底层服务，HTTP/WS 通信</td>
+          <td><code>api.ts</code>, <code>socket.ts</code></td>
+        </tr>
+      </table>
+    </div>
+
+    <h3>WebSocket 事件映射</h3>
+    <div class="table-wrapper">
+      <table>
+        <tr>
+          <th>事件名</th>
+          <th>方向</th>
+          <th>说明</th>
+        </tr>
+        <tr>
+          <td><code>private_message</code></td>
+          <td>双向</td>
+          <td>私聊消息收发</td>
+        </tr>
+        <tr>
+          <td><code>group_message</code></td>
+          <td>双向</td>
+          <td>群聊消息收发</td>
+        </tr>
+        <tr>
+          <td><code>message_read</code></td>
+          <td>客户端 → 服务端</td>
+          <td>标记消息已读</td>
+        </tr>
+        <tr>
+          <td><code>messages_read</code></td>
+          <td>服务端 → 客户端</td>
+          <td>通知消息已被读取</td>
+        </tr>
+        <tr>
+          <td><code>message_recall</code></td>
+          <td>双向</td>
+          <td>私聊消息撤回</td>
+        </tr>
+        <tr>
+          <td><code>online_users</code></td>
+          <td>服务端 → 客户端</td>
+          <td>在线用户列表</td>
+        </tr>
+        <tr>
+          <td><code>user_online</code></td>
+          <td>服务端 → 客户端</td>
+          <td>用户上线通知</td>
+        </tr>
+        <tr>
+          <td><code>user_offline</code></td>
+          <td>服务端 → 客户端</td>
+          <td>用户下线通知</td>
+        </tr>
+        <tr>
+          <td><code>unread_messages</code></td>
+          <td>服务端 → 客户端</td>
+          <td>离线未读消息推送</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Electron 迁移 -->
+  <div class="card">
+    <h2>迁移到 Electron</h2>
+
+    <p>项目已为 Electron 迁移做好基础准备。以下是完整的迁移方案：</p>
+
+    <h3>1. 安装依赖</h3>
+    <div class="code-block">
+<span class="comment"># 安装 Electron 相关依赖</span>
+<span class="keyword">npm</span> install electron electron-builder -D
+<span class="keyword">npm</span> install vite-plugin-electron vite-plugin-electron-renderer -D
+    </div>
+
+    <h3>2. 创建主进程文件</h3>
+    <div class="code-block">
+<span class="comment">// electron/main.ts</span>
+<span class="keyword">import</span> { app, BrowserWindow } <span class="keyword">from</span> <span class="string">'electron'</span>
+<span class="keyword">import</span> path <span class="keyword">from</span> <span class="string">'path'</span>
+
+<span class="keyword">let</span> mainWindow: BrowserWindow | <span class="keyword">null</span> = <span class="keyword">null</span>
+
+<span class="keyword">function</span> createWindow() {
+  mainWindow = <span class="keyword">new</span> BrowserWindow({
+    width: 1200,
+    height: 800,
+    webPreferences: {
+      preload: path.join(__dirname, <span class="string">'preload.js'</span>),
+      contextIsolation: <span class="keyword">true</span>,
+      nodeIntegration: <span class="keyword">false</span>,
+    },
+  })
+
+  <span class="comment">// 开发环境加载本地服务器</span>
+  <span class="keyword">if</span> (process.env.VITE_DEV_SERVER_URL) {
+    mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL)
+  } <span class="keyword">else</span> {
+    mainWindow.loadFile(path.join(__dirname, <span class="string">'../dist/index.html'</span>))
+  }
+}
+
+app.whenReady().then(createWindow)
+    </div>
+
+    <h3>3. 配置 Vite</h3>
+    <div class="code-block">
+<span class="comment">// vite.config.ts</span>
+<span class="keyword">import</span> electron <span class="keyword">from</span> <span class="string">'vite-plugin-electron'</span>
+
+<span class="keyword">export default</span> defineConfig({
+  plugins: [
+    vue(),
+    electron({
+      entry: <span class="string">'electron/main.ts'</span>,
+    }),
+  ],
+})
+    </div>
+
+    <h3>4. 添加构建脚本</h3>
+    <div class="code-block">
+<span class="comment">// package.json</span>
+{
+  <span class="string">"scripts"</span>: {
+    <span class="string">"dev"</span>: <span class="string">"vite"</span>,
+    <span class="string">"build"</span>: <span class="string">"vite build"</span>,
+    <span class="string">"electron:dev"</span>: <span class="string">"vite --mode electron"</span>,
+    <span class="string">"electron:build"</span>: <span class="string">"vite build && electron-builder"</span>
+  },
+  <span class="string">"main"</span>: <span class="string">"dist-electron/main.js"</span>
+}
+    </div>
+
+    <h3>5. Electron 特有功能</h3>
+    <div class="feature-grid">
+      <div class="feature-item">
+        <h4>托盘图标</h4>
+        <p>添加系统托盘，支持最小化到托盘、消息通知角标</p>
+      </div>
+      <div class="feature-item">
+        <h4>本地通知</h4>
+        <p>使用 Notification API 或 electron-notification 实现桌面通知</p>
+      </div>
+      <div class="feature-item">
+        <h4>文件拖拽</h4>
+        <p>支持拖拽文件到窗口直接发送</p>
+      </div>
+      <div class="feature-item">
+        <h4>自动更新</h4>
+        <p>集成 electron-updater 实现应用自动更新</p>
+      </div>
+      <div class="feature-item">
+        <h4>本地存储</h4>
+        <p>使用 electron-store 替代 localStorage 持久化数据</p>
+      </div>
+      <div class="feature-item">
+        <h4>深链接</h4>
+        <p>注册自定义协议，支持从网页直接唤起应用</p>
+      </div>
+    </div>
+
+    <div class="tip">
+      <div class="tip-title">迁移建议</div>
+      <p>建议先完成 Web 版本的所有功能测试，再进行 Electron 迁移。迁移时优先处理通信层（API 地址可能需要调整），然后逐步添加桌面特有功能。</p>
+    </div>
+  </div>
+
+  <!-- 后续优化 -->
+  <div class="card">
+    <h2>后续可优化的方向</h2>
+
+    <h3>功能扩展</h3>
+    <ul style="padding-left: 20px; color: #555;">
+      <li>消息搜索（本地历史记录搜索）</li>
+      <li>表情包/贴纸支持</li>
+      <li>语音/视频通话（集成 WebRTC）</li>
+      <li>消息转发、引用回复</li>
+      <li>群公告、群 @ 功能</li>
+      <li>朋友圈/动态功能</li>
+      <li>文件预览（PDF、Office 文档）</li>
+    </ul>
+
+    <h3>性能优化</h3>
+    <ul style="padding-left: 20px; color: #555;">
+      <li>消息列表虚拟滚动（大量消息时）</li>
+      <li>图片懒加载和压缩</li>
+      <li>WebSocket 断线重连优化</li>
+      <li>本地消息缓存（IndexedDB）</li>
+    </ul>
+
+    <h3>UI/UX 改进</h3>
+    <ul style="padding-left: 20px; color: #555;">
+      <li>暗色模式支持</li>
+      <li>响应式布局（移动端适配）</li>
+      <li>消息动画效果</li>
+      <li>快捷键支持</li>
+      <li>多语言国际化</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>ChatClient - 仿微信即时通讯客户端</p>
+  <p>基于 <a href="https://vuejs.org/" target="_blank">Vue 3</a> + <a href="https://www.typescriptlang.org/" target="_blank">TypeScript</a> + <a href="https://vitejs.dev/" target="_blank">Vite</a> 构建</p>
+</div>
+
+</body>
+</html>
