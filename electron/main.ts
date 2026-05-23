@@ -33,12 +33,15 @@ function createWindow() {
     // 开发环境：等待 Vite 服务器启动
     const url = process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173'
     mainWindow.loadURL(url)
-    // 打开 DevTools
-    mainWindow.webContents.openDevTools()
   } else {
     // 生产环境：加载打包后的文件
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
+    const indexPath = path.join(__dirname, '../dist/index.html')
+    console.log('加载页面:', indexPath)
+    mainWindow.loadFile(indexPath)
   }
+
+  // 打开 DevTools（调试用）
+  mainWindow.webContents.openDevTools()
 
   // 关闭窗口时最小化到托盘而不是退出
   mainWindow.on('close', (event) => {
