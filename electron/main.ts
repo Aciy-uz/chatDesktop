@@ -88,7 +88,11 @@ function createTray() {
 }
 
 // 应用准备就绪
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  // 初始化数据库
+  await initDatabase()
+  console.log('数据库初始化完成')
+
   createWindow()
   createTray()
 
@@ -102,6 +106,8 @@ app.whenReady().then(() => {
 
 // 所有窗口关闭时
 app.on('window-all-closed', () => {
+  // 关闭数据库
+  closeDatabase()
   // macOS 以外的平台退出应用
   if (process.platform !== 'darwin') {
     app.quit()
