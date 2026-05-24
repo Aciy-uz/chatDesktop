@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Friend, FriendRequest, Group, User } from '@/types'
 import { api } from '@/services/api'
+import * as storage from '@/services/storage'
+import { useAuthStore } from './auth'
 
 export const useContactStore = defineStore('contact', () => {
   const friends = ref<Friend[]>([])
@@ -12,19 +14,65 @@ export const useContactStore = defineStore('contact', () => {
   // 好友申请数量
   const pendingRequestCount = computed(() => friendRequests.value.length)
 
+  // 从缓存恢复
+  function restoreFromCache(): void {
+    const authStore = useAuthStore()
+    if (!authStore.user) return
+
+    const cachedFriends = storage.loadFriends(authStore.user.id)
+    if (cachedFriends.length > 0) {
+      friends.value = cachedFriends
+    }
+
+    const cachedGroups = storage.loadGroups(authStore.user.id)
+    if (cachedGroups.length > 0) {
+      groups.value = cachedGroups
+    }
+  }
+
   // 获取好友列表
   async function loadFriends(): Promise<void> {
+    const authStore = useAuthStore()
+
+    // 先从缓存加载
+    if (authStore.user) {
+      const cachedFriends = storage.loadFriends(authStore.user.id)
+      if (cachedFriends.length > 0) {
+        friends.value = cachedFriends
+      }
+    }
+
+    // 再从服务器加载
     const res = await api.getFriendList()
     if (res.code === 200 && res.data) {
       friends.value = res.data
+      // 保存到缓存
+      if (authStore.user) {
+        storage.saveFriends(authStore.user.id, res.data)
+      }
     }
   }
 
   // 获取群列表
   async function loadGroups(): Promise<void> {
+    const authStore = useAuthStore()
+
+    // 先从缓存加载
+    if (authStore.user) {
+      const cachedGroups = storage.loadGroups(authStore.user.id)
+      if (cachedGroups.length > 0) {
+        groups.value = cachedGroups
+      }
+    }
+
+    // 再从服务器加载
     const res = await api.getGroupList()
     if (res.code === 200 && res.data) {
       groups.value = res.data
+      // 保存到缓存
+      if (authStore.user) {
+        storage.saveGroups(authStore.user.id, res.data)
+      }
     }
   }
 
@@ -139,6 +187,7 @@ export const useContactStore = defineStore('contact', () => {
     friendRequests,
     onlineUserIds,
     pendingRequestCount,
+    restoreFromCache,
     loadFriends,
     loadGroups,
     loadFriendRequests,

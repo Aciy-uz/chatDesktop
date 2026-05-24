@@ -73,10 +73,11 @@ onMounted(async () => {
 
   initSocketListeners()
 
-  // 先恢复保存的会话
+  // 先从缓存恢复数据（立即显示）
+  contactStore.restoreFromCache()
   const hasRestoredSessions = await chatStore.restoreSessions()
 
-  // 加载好友和群列表
+  // 再从服务器加载最新数据
   await Promise.all([
     contactStore.loadFriends(),
     contactStore.loadGroups(),

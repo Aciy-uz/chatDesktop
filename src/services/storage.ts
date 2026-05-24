@@ -91,8 +91,61 @@ export async function clearUserData(userId: number): Promise<void> {
   if (isElectron()) {
     await window.electronAPI!.db.clearUserData(userId)
   } else {
-    // 清除 localStorage 中的会话数据
     localStorage.removeItem(`chat_sessions_${userId}`)
+  }
+}
+
+// ============ 用户资料缓存 ============
+
+export function saveUserProfile(userId: number, profile: any): void {
+  const key = `user_profile_${userId}`
+  localStorage.setItem(key, JSON.stringify(profile))
+}
+
+export function loadUserProfile(userId: number): any | null {
+  const key = `user_profile_${userId}`
+  const saved = localStorage.getItem(key)
+  if (!saved) return null
+  try {
+    return JSON.parse(saved)
+  } catch {
+    return null
+  }
+}
+
+// ============ 好友列表缓存 ============
+
+export function saveFriends(userId: number, friends: any[]): void {
+  const key = `user_friends_${userId}`
+  localStorage.setItem(key, JSON.stringify(friends))
+}
+
+export function loadFriends(userId: number): any[] {
+  const key = `user_friends_${userId}`
+  const saved = localStorage.getItem(key)
+  if (!saved) return []
+  try {
+    return JSON.parse(saved)
+  } catch {
+    return []
+  }
+}
+
+// ============ 群列表缓存 ============
+
+export function saveGroups(userId: number, groups: any[]): void {
+  const key = `user_groups_${userId}`
+  localStorage.setItem(key, JSON.stringify(groups))
+}
+
+export function loadGroups(userId: number): any[] {
+  const key = `user_groups_${userId}`
+  const saved = localStorage.getItem(key)
+  if (!saved) return []
+  try {
+    return JSON.parse(saved)
+  } catch {
+    return []
   }
 }
 

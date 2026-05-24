@@ -2,6 +2,8 @@
 
 基于 Vue 3 + TypeScript + Vite + Pinia + Vue Router 的聊天客户端，配合 ChatServer 后端使用。
 
+> 后端项目 ：[ChatServer](https://github.com/Aciy-uz/ChatServes)
+
 ## 技术栈
 
 - **框架**: Vue 3 (Composition API)
